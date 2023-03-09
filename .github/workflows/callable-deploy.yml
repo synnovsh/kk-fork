@@ -22,6 +22,7 @@ jobs:
   deploy:
     name: Deploy ${{ inputs.aws_environment }}
     runs-on: ubuntu-latest
+    environment: ${{ inputs.aws_environment }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
