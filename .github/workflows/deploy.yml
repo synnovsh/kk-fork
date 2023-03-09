@@ -18,7 +18,7 @@ on:
 jobs: 
   deploy_dev_on_push_main:
     if: github.event_name == 'push'
-    name: Deploy dev on push to main
+    name: Deploy ${{ input.aws_environment }} on push to main
     uses: ./.github/workflows/callable-deploy.yml
     with:
       aws_environment: gasynnove
