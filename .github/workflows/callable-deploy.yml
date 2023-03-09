@@ -12,15 +12,10 @@ on:
       deploy_backend_only:
         type: boolean
         default: false
-      excel:
-        type: boolean
-        default: true
     secrets:
       aws_access_key_id:
         required: true
       aws_secret_access_key:
-        required: true
-      azure:
         required: true
 
 jobs:
@@ -34,7 +29,7 @@ jobs:
           node-version: "16"
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.aws_access_key_id }}
           aws-secret-access-key: ${{ secrets.aws_secret_access_key }}
@@ -52,8 +47,6 @@ jobs:
           --require-approval never \
           --outputs-file outputs.json \
           --context ENV=${{ inputs.aws_environment }} \
-          --context AZURE=${{ secrets.azure }} \
-          --context EXCEL=${{ inputs.excel }}
 
       - name: Prepare frontend ${{ inputs.aws_environment }} deployment
         if: inputs.deploy_backend_only == false
