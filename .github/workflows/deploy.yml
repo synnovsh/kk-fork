@@ -39,7 +39,7 @@ jobs:
       
       - name: Log changes
         run: |
-           echo "Frontend has changes: ${{ steps.frontend.outputs.any_changed && teps.frontend-cdk.outputs.any_changed}}"
+           echo "Frontend has changes: ${{ steps.frontend.outputs.any_changed && steps.frontend-cdk.outputs.any_changed}}"
            echo "List all the files that have changed: ${{ steps.frontend.outputs.all_changed_files }}"
 
       - name: Check if changes to backend
