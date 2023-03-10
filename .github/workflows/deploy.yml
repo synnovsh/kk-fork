@@ -39,7 +39,7 @@ jobs:
       
       - name: Log changes
         run: |
-           echo "Frontend has changes: ${{ steps.frontend.outputs.any_modified && steps.frontend-cdk.outputs.any_modified}}"
+           echo "Frontend has changes: ${{ steps.frontend.outputs.any_modified || steps.frontend-cdk.outputs.any_modified}}"
            echo "frontend/: ${{ steps.frontend.outputs.all_modified_files }}"
            echo "frontend-cdk/: ${{ steps.frontend-cdk.outputs.all_modified_files }}"
 
