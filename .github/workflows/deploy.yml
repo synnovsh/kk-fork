@@ -33,7 +33,7 @@ jobs:
       
     outputs:
       frontend: ${{ steps.frontend.outputs.any_changed }}
-      backend: $ {{ steps.backend.outputs.any_changed }}
+      backend: ${{ steps.backend.outputs.any_changed }}
       has_changes: ${{ needs.check_for_changes.backend || needs.check_for_changes.frontend }}
 
   deploy_dev_on_push_main:
