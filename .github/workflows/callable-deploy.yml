@@ -12,15 +12,10 @@ on:
       deploy_backend_only:
         type: boolean
         default: false
-      excel:
-        type: boolean
-        default: true
     secrets:
       aws_access_key_id:
         required: true
       aws_secret_access_key:
-        required: true
-      azure:
         required: true
 
 jobs:
@@ -52,8 +47,6 @@ jobs:
           --require-approval never \
           --outputs-file outputs.json \
           --context ENV=${{ inputs.aws_environment }} \
-          --context AZURE=${{ secrets.azure }} \
-          --context EXCEL=${{ inputs.excel }}
 
       - name: Prepare frontend ${{ inputs.aws_environment }} deployment
         if: inputs.deploy_backend_only == false
