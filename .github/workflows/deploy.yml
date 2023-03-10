@@ -19,13 +19,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Get 
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          
+      - name: Check if changes to frontend
         id: frontend
         uses: tj-actions/changed-files@v35
         with:
           files: frontend* # Includes frontend/* and frontend-cdk/*
 
-      - name: Set
+      - name: Check if changes to backend
         id: backend
         uses: tj-actions/changed-files@v35
         with:
