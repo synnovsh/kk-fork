@@ -71,24 +71,20 @@ jobs:
     if:  ${{ github.event_name == 'push' && needs.check_for_changes.outputs.has_changes == 'true' }} 
     name: Deploy dev on push to main
     runs-on: ubuntu-latest
-    steps: 
-      - name: aiya
-        run: |
-              echo "Should u do it: ${{ needs.check_for_changes.outputs.has_changes == 'true' }} "
-
-    #uses: ./.github/workflows/callable-deploy.yml
-    #with:
-    #  aws_environment: dev
-    #  deploy_frontend: ${{ fromJSON(needs.check_for_changes.outputs.frontend) }}
-    #  deploy_backend: ${{ fromJSON(needs.check_for_changes.outputs.backend) }}
-    #secrets:
-    #  aws_access_key_id: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
-    #  aws_secret_access_key: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY}}    
+   
+    uses: ./.github/workflows/callable-deploy.yml
+    with:
+      aws_environment: dev
+      deploy_frontend: ${{ fromJSON(needs.check_for_changes.outputs.frontend) }}
+      deploy_backend: ${{ fromJSON(needs.check_for_changes.outputs.backend) }}
+    secrets:
+      aws_access_key_id: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
+      aws_secret_access_key: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY}}    
       
 
   deploy_on_workflow_dispatch:
     needs: check_for_changes
-    if: false #github.event_name == 'workflow_dispatch' && ${{ needs.check_for_changes.outputs.has_changes }} == 'true'
+    if: $ {{ github.event_name == 'workflow_dispatch' && needs.check_for_changes.outputs.has_changes }} == 'true' }}
     name: Deploy on dispatch
     uses: ./.github/workflows/callable-deploy.yml
     with:
