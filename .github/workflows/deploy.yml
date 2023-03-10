@@ -39,9 +39,9 @@ jobs:
       
       - name: Log changes
         run: |
-           echo "Frontend has changes: ${{ steps.frontend.outputs.any_changed && steps.frontend-cdk.outputs.any_changed}}"
-           echo "frontend/: ${{ steps.frontend.outputs.all_changed_files }}"
-           echo "frontend-cdk/: ${{ steps.frontend-cdk.outputs.all_changed_files }}"
+           echo "Frontend has changes: ${{ steps.frontend.outputs.any_modified && steps.frontend-cdk.outputs.any_modified}}"
+           echo "frontend/: ${{ steps.frontend.outputs.all_modified_files }}"
+           echo "frontend-cdk/: ${{ steps.frontend-cdk.outputs.all_modified_files }}"
 
 
       - name: Check if changes to backend
@@ -53,18 +53,18 @@ jobs:
           
       - name: Log Changes
         run: |
-           echo "Backend has changes: ${{ steps.backend.outputs.any_changed }}"
-           echo "List all the files that have changed: ${{ steps.backend.outputs.all_changed_files }}"
+           echo "Backend has changes: ${{ steps.backend.outputs.any_modified }}"
+           echo "List all the files that have modified: ${{ steps.backend.outputs.all_modified_files }}"
 
       - name: Log if there were any changes at all
         run: |
-           echo "Changes: ${{ steps.frontend.outputs.any_changed || steps.backend.outputs.any_changed }}"
+           echo "Changes: ${{ steps.frontend.outputs.any_modified || steps.backend.outputs.any_modified }}"
     
     # These outputs are strings  
     outputs:
-      frontend: ${{ steps.frontend.outputs.any_changed && steps.frontend.outputs.any_changed}}
-      backend: ${{ steps.backend.outputs.any_changed }}
-      has_changes: ${{ steps.frontend.outputs.any_changed || steps.backend.outputs.any_changed }}
+      frontend: ${{ steps.frontend.outputs.any_modified && steps.frontend.outputs.any_modified}}
+      backend: ${{ steps.backend.outputs.any_modified }}
+      has_changes: ${{ steps.frontend.outputs.any_modified || steps.backend.outputs.any_modified }}
 
   deploy_dev_on_push_main:
     needs: check_for_changes
