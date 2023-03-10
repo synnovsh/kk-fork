@@ -50,6 +50,11 @@ jobs:
         with:
           json: "true"
           files: cdk/* 
+
+      - name: Log changes
+        run: |
+           echo "Backend has changes: ${{ steps.backend.outputs.any_modified }}"
+           echo "cdk/: ${{ steps.frontend-cdk.outputs.all_modified_files }}"
     
     # These outputs are strings  
     outputs:
