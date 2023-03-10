@@ -45,7 +45,7 @@ jobs:
         run: cd cdk && npx cdk bootstrap
 
       - name: Deploy backend to ${{ inputs.aws_environment }}
-      if: deploy_backend
+        if: $ {{ inputs.deploy_backend }}
         run: |
           cd cdk && npx cdk deploy \
           --require-approval never \
@@ -53,7 +53,7 @@ jobs:
           --context ENV=${{ inputs.aws_environment }} \
 
       - name: Prepare frontend ${{ inputs.aws_environment }} deployment
-        if: deploy_frontend
+        if:  $ {{ inputs.deploy_frontend }}
         env:
           REACT_APP_USER_BRANCH: ${{ inputs.aws_environment == 'prod' && 'master' || 'dev' }}
         run: |
