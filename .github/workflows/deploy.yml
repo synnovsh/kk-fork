@@ -30,21 +30,19 @@ jobs:
           files: frontend* # Includes frontend/* and frontend-cdk/*
       
       - name: Log changes
-        if: steps.frontend.outputs.any_changed == 'true'
         run: |
-           echo "Frontend folder has changed."
-           echo "List all the files that have changed: ${{ steps.backend.outputs.all_changed_files }}"
+           echo "Frontend has changes: ${{ steps.frontend.outputs.any_changed == 'true' }}"
+           echo "List all the files that have changed: ${{ steps.frontend.outputs.all_changed_files }}"
 
       - name: Check if changes to backend
         id: backend
         uses: tj-actions/changed-files@v35
         with:
-          files: cdk* 
+          files: cdk/* 
           
       - name: Log Changes
-        if: steps.backend.outputs.any_changed == 'true'
         run: |
-           echo "Backend folder has changed."
+           echo "Backend has changes: ${{ steps.backend.outputs.any_changed == 'true' }}"
            echo "List all the files that have changed: ${{ steps.backend.outputs.all_changed_files }}"
       
     outputs:
