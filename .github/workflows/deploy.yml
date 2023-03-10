@@ -50,25 +50,16 @@ jobs:
         with:
           json: "true"
           files: cdk/* 
-          
-      - name: Log Changes
-        run: |
-           echo "Backend has changes: ${{ steps.backend.outputs.any_modified }}"
-           echo "List all the files that have modified: ${{ steps.backend.outputs.all_modified_files }}"
-
-      - name: Log if there were any changes at all
-        run: |
-           echo "Changes: ${{ steps.frontend.outputs.any_modified || steps.backend.outputs.any_modified }}"
     
     # These outputs are strings  
     outputs:
-      frontend: ${{ steps.frontend.outputs.any_modified && steps.frontend.outputs.any_modified}}
-      backend: ${{ steps.backend.outputs.any_modified }}
-      has_changes: ${{ steps.frontend.outputs.any_modified || steps.backend.outputs.any_modified }}
+      frontend: steps.frontend.outputs.any_modified && steps.frontend.outputs.any_modified
+      backend: steps.backend.outputs.any_modified 
+      has_changes: steps.frontend.outputs.any_modified || steps.backend.outputs.any_modified
 
   deploy_dev_on_push_main:
     needs: check_for_changes
-    if:  ${{ github.event_name == 'push' && needs.check_for_changes.outputs.has_changes == 'true' }} 
+    if: github.event_name == 'push' && needs.check_for_changes.outputs.has_changes == 'true'
     name: Deploy dev on push to main
     uses: ./.github/workflows/callable-deploy.yml
     with:
