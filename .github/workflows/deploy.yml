@@ -61,13 +61,13 @@ jobs:
 
   deploy_dev_on_push_main:
     needs: check_for_changes
-    if: false #(github.event_name == 'push' && ${{ needs.check_for_changes.outputs.has_changes }})
+    if: github.event_name == 'push' && ${{ needs.check_for_changes.outputs.has_changes }}
     name: Deploy dev on push to main
     uses: ./.github/workflows/callable-deploy.yml
     with:
       aws_environment: dev
-      deploy_frontend: ${{ fromJSON(needs.check_for_changes.outputs.frontend) }}
-      deploy_backend: ${{ fromJSON(needs.check_for_changes.outputs.backend) }}
+      deploy_frontend: ${{ needs.check_for_changes.outputs.frontend }}
+      deploy_backend: ${{ needs.check_for_changes.outputs.backend }}
     secrets:
       aws_access_key_id: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
       aws_secret_access_key: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY}}    
@@ -75,13 +75,13 @@ jobs:
 
   deploy_on_workflow_dispatch:
     needs: check_for_changes
-    if: false #(github.event_name == 'workflow_dispatch' && ${{ fromJson(needs.check_for_changes.outputs.has_changes) }})
+    if: false #(github.event_name == 'workflow_dispatch' && ${{ needs.check_for_changes.outputs.has_changes }})
     name: Deploy on dispatch
     uses: ./.github/workflows/callable-deploy.yml
     with:
       aws_environment: ${{ inputs.aws_environment }}
-      deploy_frontend: ${{ fromJSON(needs.check_for_changes.outputs.frontend) }}
-      deploy_backend: ${{ fromJSON(needs.check_for_changes.outputs.backend) }}
+      deploy_frontend: ${{ needs.check_for_changes.outputs.frontend }}
+      deploy_backend: ${{ needs.check_for_changes.outputs.backend }}
     secrets:
       aws_access_key_id: ${{ inputs.aws_environment == 'prod' && secrets.PROD_AWS_ACCESS_KEY_ID || secrets.DEV_AWS_ACCESS_KEY_ID }}
       aws_secret_access_key: ${{ inputs.aws_environment == 'prod' && secrets.PROD_AWS_SECRET_ACCESS_KEY || secrets.DEV_AWS_SECRET_ACCESS_KEY}}
