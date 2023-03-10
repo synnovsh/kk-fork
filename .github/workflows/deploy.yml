@@ -68,7 +68,7 @@ jobs:
 
   deploy_dev_on_push_main:
     needs: check_for_changes
-    if: github.event_name == 'push' && ${{ needs.check_for_changes.outputs.has_changes == 'true' }} 
+    if:  ${{ github.event_name == 'push' && needs.check_for_changes.outputs.has_changes == 'true' }} 
     name: Deploy dev on push to main
     runs-on: ubuntu-latest
     steps: 
