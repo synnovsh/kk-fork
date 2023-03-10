@@ -50,11 +50,11 @@ jobs:
     outputs:
       frontend: ${{ steps.frontend.outputs.any_changed }}
       backend: ${{ steps.backend.outputs.any_changed }}
-      has_changes: ${{ steps.frontend.outputs.any_changed || steps.backend.outputs.any_changed }}
+      has_changes: ${{ fromJson(steps.frontend.outputs.any_changed) || fromJson(steps.backend.outputs.any_changed) }}
 
   deploy_dev_on_push_main:
     needs: check_for_changes
-    if: (github.event_name == 'push' && ${{ needs.check_for_changes.outputs.has_changes }})
+    if: (github.event_name == 'push' && ${{ needs.check_for_changes.outputs.has_changes == 'true' }})
     name: Deploy dev on push to main
     uses: ./.github/workflows/callable-deploy.yml
     with:
