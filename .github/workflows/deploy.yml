@@ -15,7 +15,7 @@ on:
 
 jobs: 
   check_for_changes:
-    name: Check for changes
+    name: Check if needs deployment
     runs-on: ubuntu-latest
 
     steps:
@@ -40,7 +40,9 @@ jobs:
       - name: Log changes
         run: |
            echo "Frontend has changes: ${{ steps.frontend.outputs.any_changed && steps.frontend-cdk.outputs.any_changed}}"
-           echo "List all the files that have changed: ${{ steps.frontend.outputs.all_changed_files }}"
+           echo "frontend/: ${{ steps.frontend.outputs.all_changed_files }}"
+           echo "frontend-cdk/: ${{ steps.frontend-cdk.outputs.all_changed_files }}"
+
 
       - name: Check if changes to backend
         id: backend
@@ -53,13 +55,17 @@ jobs:
         run: |
            echo "Backend has changes: ${{ steps.backend.outputs.any_changed }}"
            echo "List all the files that have changed: ${{ steps.backend.outputs.all_changed_files }}"
-      
+
+      - name: Log if there were any changes at all
+        run: |
+           echo "Changes: ${{ steps.frontend.outputs.any_changed || steps.backend.outputs.any_changed }}"
+    
+    # These outputs are strings  
     outputs:
       frontend: ${{ steps.frontend.outputs.any_changed && steps.frontend.outputs.any_changed}}
       backend: ${{ steps.backend.outputs.any_changed }}
       has_changes: ${{ fromJson(steps.frontend.outputs.any_changed || steps.backend.outputs.any_changed) }}
 
-  # Note that github.needs outputs a string 
   deploy_dev_on_push_main:
     needs: check_for_changes
     if: github.event_name == 'push' && ${{ fromJSON(needs.check_for_changes.outputs.has_changes) }}
