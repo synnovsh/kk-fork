@@ -17,10 +17,11 @@ jobs:
   check_for_changes:
     name: Check for changes
     runs-on: ubuntu-latest
+
     steps:
+      - uses: tj-actions/changed-files@v35
       - name: Check if frontend has changed
       id: frontend
-      uses: tj-actions/changed-files@v35
       with:
         - frontend* # Includes frontend/* and frontend-cdk/*
       run: |
@@ -28,7 +29,6 @@ jobs:
 
       - name: Check if backend has changed
       id: backend
-      uses: tj-actions/changed-files@v35
       with:
         - cdk* 
       run: |
