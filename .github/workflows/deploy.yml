@@ -48,7 +48,7 @@ jobs:
     outputs:
       frontend: ${{ steps.frontend.outputs.any_changed }}
       backend: ${{ steps.backend.outputs.any_changed }}
-      has_changes: ${{ fromJson(steps.frontend.outputs.any_changed) || fromJson(steps.backend.outputs.any_changed) }}
+      has_changes: ${{ steps.frontend.outputs.any_changed == 'true' || steps.backend.outputs.any_changed == 'true' }}
 
   deploy_dev_on_push_main:
     needs: check_for_changes
@@ -66,7 +66,7 @@ jobs:
 
   deploy_on_workflow_dispatch:
     needs: check_for_changes
-    if: (github.event_name == 'workflow_dispatch' && ${{ needs.check_for_changes.outputs.has_changes }})
+    if: (github.event_name == 'workflow_dispatch' && ${{ fromJson(needs.check_for_changes.outputs.has_changes) }})
     name: Deploy on dispatch
     uses: ./.github/workflows/callable-deploy.yml
     with:
