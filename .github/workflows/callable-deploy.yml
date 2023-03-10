@@ -9,7 +9,10 @@ on:
       aws_region:
         type: string
         default: 'eu-central-1'
-      deploy_backend_only:
+      deploy_frontend:
+        type: boolean
+        default: false
+      deploy_backend:
         type: boolean
         default: false
     secrets:
@@ -42,6 +45,7 @@ jobs:
         run: cd cdk && npx cdk bootstrap
 
       - name: Deploy backend to ${{ inputs.aws_environment }}
+      if: deploy_backend
         run: |
           cd cdk && npx cdk deploy \
           --require-approval never \
@@ -49,7 +53,7 @@ jobs:
           --context ENV=${{ inputs.aws_environment }} \
 
       - name: Prepare frontend ${{ inputs.aws_environment }} deployment
-        if: inputs.deploy_backend_only == false
+        if: deploy_frontend
         env:
           REACT_APP_USER_BRANCH: ${{ inputs.aws_environment == 'prod' && 'master' || 'dev' }}
         run: |

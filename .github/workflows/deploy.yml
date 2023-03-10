@@ -12,30 +12,50 @@ on:
         options:
           - dev
           - prod
-      deploy_backend_only:
-        description: Deploy backend only
-        type: boolean
-        default: false
 
 jobs: 
+  check_for_changes:
+    steps:
+      - name: Check if frontend has changed
+      id: frontend
+      uses: tj-actions/changed-files@v35
+      with:
+        - frontend* # Includes frontend/* and frontend-cdk/*
+      run: |
+        echo  "deploy_frontend="${{ steps.frontend.outputs.any_changed }} >> $GITHUB_ENV
+
+      - name: Check if backend has changed
+      id: backend
+      uses: tj-actions/changed-files@v35
+      with:
+        - cdk* 
+      run: |
+        echo  $ {{ steps.backend.outputs.any_changed }} >> $GITHUB_ENV
+
+
   deploy_dev_on_push_main:
-    if: github.event_name == 'push'
+    needs: check_for_changes
+    if: github.event_name == 'push' && ${{ env.backend_changed || env.frontend_changed }}
     name: Deploy dev on push to main
-    uses: ./.github/workflows/callable-deploy.yml
-    with:
-      aws_environment: dev
-      deploy_backend_only: false
-    secrets:
-      aws_access_key_id: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
-      aws_secret_access_key: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY}}
+      uses: ./.github/workflows/callable-deploy.yml
+      with:
+        aws_environment: dev
+        deploy_frontend: ${{ env.frontend_changed }}
+        deploy_backend: ${{ env.backend_changed }}
+      secrets:
+        aws_access_key_id: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
+        aws_secret_access_key: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY}}    
+      
 
   deploy_on_workflow_dispatch:
-    if: github.event_name == 'workflow_dispatch'
+    needs: check_for_changes
+    if: github.event_name == 'workflow_dispatch' && ${{ env.backend_changed || env.frontend_changed }}
     name: Deploy on dispatch
     uses: ./.github/workflows/callable-deploy.yml
     with:
       aws_environment: ${{ inputs.aws_environment }}
-      deploy_backend_only: ${{ inputs.deploy_backend_only }}
+      deploy_frontend: ${{ env.backend_changed }}
+      deploy_backend: ${{ env.backend_changed }}
     secrets:
       aws_access_key_id: ${{ inputs.aws_environment == 'prod' && secrets.PROD_AWS_ACCESS_KEY_ID || secrets.DEV_AWS_ACCESS_KEY_ID }}
       aws_secret_access_key: ${{ inputs.aws_environment == 'prod' && secrets.PROD_AWS_SECRET_ACCESS_KEY || secrets.DEV_AWS_SECRET_ACCESS_KEY}}
