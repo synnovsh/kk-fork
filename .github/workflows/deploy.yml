@@ -68,7 +68,7 @@ jobs:
 
   deploy_dev_on_push_main:
     needs: check_for_changes
-    if: github.event_name == 'push' && ${{ needs.check_for_changes.outputs.has_changes == 'true' }}
+    if: github.event_name == 'push' && ${{ needs.check_for_changes.outputs.has_changes }} == 'true'
     name: Deploy dev on push to main
     uses: ./.github/workflows/callable-deploy.yml
     with:
@@ -82,7 +82,7 @@ jobs:
 
   deploy_on_workflow_dispatch:
     needs: check_for_changes
-    if: github.event_name == 'workflow_dispatch' && ${{ needs.check_for_changes.outputs.has_changes == 'true' }}
+    if: github.event_name == 'workflow_dispatch' && ${{ needs.check_for_changes.outputs.has_changes }} == 'true'
     name: Deploy on dispatch
     uses: ./.github/workflows/callable-deploy.yml
     with:
