@@ -72,9 +72,9 @@ jobs:
     name: Deploy dev on push to main
     runs-on: ubuntu-latest
     steps: 
-      - id: aiya
-      run: |
-            echo "Should u do it: ${{ needs.check_for_changes.outputs.has_changes == 'true' }} "
+      - name: aiya
+        run: |
+              echo "Should u do it: ${{ needs.check_for_changes.outputs.has_changes == 'true' }} "
 
     #uses: ./.github/workflows/callable-deploy.yml
     #with:
