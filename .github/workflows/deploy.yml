@@ -60,7 +60,7 @@ jobs:
 
   fake_job:
     needs: check_for_changes
-    if: true #| github.event_name == 'push' && ${{ fromJson(needs.check_for_changes.outputs.frontend) || fromJson(needs.check_for_changes.outputs.backend) }}
+    if:  ${{ github.event_name == 'push' && fromJson(needs.check_for_changes.outputs.frontend) || fromJson(needs.check_for_changes.outputs.backend) }} #| github.event_name == 'push' && ${{ fromJson(needs.check_for_changes.outputs.frontend) || fromJson(needs.check_for_changes.outputs.backend) }}
     name: Fake Job
     runs-on: ubuntu-latest
 
