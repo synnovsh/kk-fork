@@ -18,38 +18,23 @@ on:
         default: false
 
 jobs: 
-  check_files:
-    name: Check if needs deployment
+  deploy:
+    outputs:
+      result: failure
+
+  slackNotification:
+    if: ${{ always() }}
+    needs: [deploy]
+    name: Slack Notification
     runs-on: ubuntu-latest
     steps:
-        - uses: actions/checkout@v3
-          with:
-            fetch-depth: 0
-
-        - name: Check changed files
-          id: check
-          uses: tj-actions/changed-files@v35
-          with:
-            files_ignore: |
-              */README.md
-              *.sh
-              scripts/*
-              .github/*
-
-        - name: Log changes
-          run: |
-             echo "Any files changed: ${{ steps.check.outputs.any_modified }}"
-             echo "Files: ${{ steps.check.outputs.all_modified_files }}"
-
-    outputs:
-      any_modified: ${{ steps.check.outputs.any_modified }}
-
-  deploy_dev_on_push_main:
-      needs: check_files
-      if: github.event_name == 'push' && needs.check_files.outputs.any_modified == 'true'
-      runs-on: ubuntu-latest
-      steps:
-      - id: aiya
-        run: |
-              echo "Should u do it: ${{ needs.check_files.outputs.any_modified }} "
+      - uses: actions/checkout@v3
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_CHANNEL: kompetansekartlegging-deployments
+          SLACK_COLOR: ${{ needs.deploy.result }} # or a specific color like 'good' or '#ff00ff'
+          SLACK_ICON: https://github.com/rtCamp.png?size=48
+          SLACK_USERNAME: Kompetansekartlegging deploy bot
+          SLACK_WEBHOOK: ${{ secrets.SLACK_DEPLOY_WEBHOOK_URL }}
       
