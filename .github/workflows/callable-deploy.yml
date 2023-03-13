@@ -9,6 +9,9 @@ on:
       aws_region:
         type: string
         default: 'eu-central-1'
+    secrets:
+      SLACK_DEPLOY_WEBHOOK_URL:
+        required: true
 
 jobs:
   deploy:
