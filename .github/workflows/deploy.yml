@@ -38,5 +38,18 @@ jobs:
 
         - name: Log changes
           run: |
-             echo "Any files changed: ${{ steps.check.outputs.any_modified_files }}"
+             echo "Any files changed: ${{ steps.check.outputs.any_modified }}"
              echo "Files: ${{ steps.check.outputs.all_modified_files }}"
+
+    outputs:
+      any_modified: ${{ steps.check.outputs.any_modified }}
+
+  deploy_dev_on_push_main:
+      needs: check_files
+      if: github.event_name == 'push' && ${{ needs.check_files.outputs.any_modified == 'true' }}
+      runs-on: ubuntu-latest
+      steps:
+      - id: aiya
+        run: |
+              echo "Should u do it: ${{ needs.check_files.outputs.any_modified }} "
+      
