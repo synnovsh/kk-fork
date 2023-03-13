@@ -19,9 +19,10 @@ on:
 
 jobs: 
   deploy:
+    runs-on: ubuntu-latest
     steps:
       - name: Log changes
-      run: |
+        run: |
              echo "wooo"   
     outputs:
       result: failure
