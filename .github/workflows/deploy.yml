@@ -74,7 +74,7 @@ jobs:
 
   deploy_on_workflow_dispatch:
     needs: check_for_changes
-    if: ${{ github.event_name == 'push' && fromJson(needs.check_for_changes.outputs.frontend) || fromJson(needs.check_for_changes.outputs.backend) }}
+    if: ${{ github.event_name == 'workflow_dispatch' && fromJson(needs.check_for_changes.outputs.frontend) || fromJson(needs.check_for_changes.outputs.backend) }}
     name: Deploy on dispatch
     uses: ./.github/workflows/callable-deploy.yml
     with:
