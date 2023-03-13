@@ -29,7 +29,7 @@ jobs:
 
   slackNotification:
     if: ${{ always() }}
-    needs: [deploy]
+    needs: deploy
     name: Slack Notification
     runs-on: ubuntu-latest
     steps:
@@ -38,7 +38,7 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_CHANNEL: kompetansekartlegging-deployments
-          SLACK_COLOR: ${{ needs.deploy.result }} # or a specific color like 'good' or '#ff00ff'
+          SLACK_COLOR: failure #${{ needs.deploy.result }} # or a specific color like 'good' or '#ff00ff'
           SLACK_ICON: https://github.com/rtCamp.png?size=48
           SLACK_USERNAME: Kompetansekartlegging deploy bot
           SLACK_WEBHOOK: ${{ secrets.SLACK_DEPLOY_WEBHOOK_URL }}
