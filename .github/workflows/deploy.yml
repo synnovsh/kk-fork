@@ -39,7 +39,9 @@ jobs:
       
       - name: Log changes
         run: |
-           echo "Frontend has changes: ${{ steps.frontend.outputs.any_modified || steps.frontend-cdk.outputs.any_modified}}"
+           echo "check or: ${{ steps.frontend.outputs.any_modified || steps.frontend-cdk.outputs.any_modified }}"
+           echo "check or again: ${{ fromJson(steps.frontend.outputs.any_modified) || fromJson(steps.frontend-cdk.outputs.any_modified) }}"
+           echo "Frontend has changes: ${{ steps.frontend.outputs.any_modified || steps.frontend-cdk.outputs.any_modified }}"
            echo "frontend/: ${{ steps.frontend.outputs.all_modified_files }}"
            echo "frontend-cdk/: ${{ steps.frontend-cdk.outputs.all_modified_files }}"
 
@@ -54,17 +56,17 @@ jobs:
       - name: Log changes
         run: |
            echo "Backend has changes: ${{ steps.backend.outputs.any_modified }}"
-           echo "cdk/: ${{ steps.frontend-cdk.outputs.all_modified_files }}"
+           echo "cdk/: ${{ steps.backend.outputs.all_modified_files }}"
     
     # These outputs are strings  
     outputs:
-      frontend: steps.frontend.outputs.any_modified && steps.frontend.outputs.any_modified
+      frontend: ${{ steps.frontend.outputs.any_modified || steps.frontend-cdk.outputs.any_modified }}
       backend: steps.backend.outputs.any_modified 
-      has_changes: steps.frontend.outputs.any_modified || steps.backend.outputs.any_modified
+      has_changes:  ${{ !(!steps.frontend.outputs.any_modified && !steps.backend.outputs.any_modified) }}
 
   deploy_dev_on_push_main:
     needs: check_for_changes
-    if: github.event_name == 'push' && needs.check_for_changes.outputs.has_changes == 'true'
+    if: false #github.event_name == 'push' && needs.check_for_changes.outputs.has_changes == 'true'
     name: Deploy dev on push to main
     uses: ./.github/workflows/callable-deploy.yml
     with:
@@ -78,7 +80,7 @@ jobs:
 
   deploy_on_workflow_dispatch:
     needs: check_for_changes
-    if: ${{ github.event_name == 'workflow_dispatch' && needs.check_for_changes.outputs.has_changes == 'true' }}
+    if: false # ${{ github.event_name == 'workflow_dispatch' && needs.check_for_changes.outputs.has_changes == 'true' }}
     name: Deploy on dispatch
     uses: ./.github/workflows/callable-deploy.yml
     with:
