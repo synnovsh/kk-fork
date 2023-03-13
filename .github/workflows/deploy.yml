@@ -67,7 +67,7 @@ jobs:
     steps:
     - name: Foo
       run: |
-        echo "Any changes: ${{ fromJson(needs.check_for_changes.outputs.frontend) || fromJson(needs.check_for_changes.outputs.backend) }}"
+        echo "Changes: ${{ fromJson(needs.check_for_changes.outputs.frontend) || fromJson(needs.check_for_changes.outputs.backend) }}"
         echo "Conditional: ${{ github.event_name == 'push' && fromJson(needs.check_for_changes.outputs.frontend) || fromJson(needs.check_for_changes.outputs.backend) }}"
 
   deploy_dev_on_push_main:
