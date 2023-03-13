@@ -46,7 +46,7 @@ jobs:
 
   deploy_dev_on_push_main:
       needs: check_files
-      if: github.event_name == 'push' && ${{ needs.check_files.outputs.any_modified == 'true' }}
+      if: github.event_name == 'push' && needs.check_files.outputs.any_modified == 'true'
       runs-on: ubuntu-latest
       steps:
       - id: aiya
