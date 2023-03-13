@@ -24,8 +24,6 @@ jobs:
         run: echo "foo"
 
       - name: Deploy frontend to ${{ inputs.aws_environment }}
-        if: inputs.deploy_backend_only == false
-        run: cd frontend-cdk && npx cdk deploy --require-approval never
 
   slackNotification:
     if: ${{ always() }}

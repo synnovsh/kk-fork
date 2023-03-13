@@ -12,10 +12,6 @@ on:
         options:
           - dev
           - prod
-      deploy_backend_only:
-        description: Deploy backend only
-        type: boolean
-        default: false
 
 jobs: 
   deploy_dev_on_push_main:
@@ -24,7 +20,6 @@ jobs:
     uses: ./.github/workflows/callable-deploy.yml
     with:
       aws_environment: dev
-      deploy_backend_only: false
 
   deploy_on_workflow_dispatch:
     if: github.event_name == 'workflow_dispatch'
@@ -32,4 +27,3 @@ jobs:
     uses: ./.github/workflows/callable-deploy.yml
     with:
       aws_environment: ${{ inputs.aws_environment }}
-      deploy_backend_only: ${{ inputs.deploy_backend_only }}
