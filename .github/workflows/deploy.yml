@@ -19,6 +19,10 @@ on:
 
 jobs: 
   deploy:
+    steps:
+      - name: Log changes
+      run: |
+             echo "wooo"   
     outputs:
       result: failure
 
