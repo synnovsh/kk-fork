@@ -42,7 +42,7 @@ jobs:
              echo "Files: ${{ steps.check.outputs.all_modified_files }}"
 
     outputs:
-      any_modified: ${{ steps.check.outputs.any_modified }}
+      any_modified: steps.check.outputs.any_modified
 
   deploy_dev_on_push_main:
       needs: check_files
