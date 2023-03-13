@@ -46,7 +46,6 @@ jobs:
         id: backend
         uses: tj-actions/changed-files@v35
         with:
-          json: "true"
           files: cdk/* 
 
       - name: Log changes
