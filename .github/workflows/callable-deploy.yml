@@ -50,12 +50,12 @@ jobs:
           cd cdk && npx cdk deploy \
           --require-approval never \
           --outputs-file outputs.json \
-          --context ENV=${{ inputs.aws_environment }} \
+          --context ENV=gasynnove \ 
 
       - name: Prepare frontend ${{ inputs.aws_environment }} deployment
         if:  ${{ inputs.deploy_frontend }}
         env:
-          REACT_APP_USER_BRANCH: ${{ inputs.aws_environment == 'prod' && 'master' || 'dev' }}
+          REACT_APP_USER_BRANCH: gasynnove #${{ inputs.aws_environment == 'prod' && 'master' || 'dev' }}
         run: |
           cd cdk && npx ts-node --prefer-ts-exts hooks/hooks.ts && \
           npm run codegen && \
