@@ -42,3 +42,4 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_DEPLOY_WEBHOOK_URL }}
           SLACK_MESSAGE: '[Deploy to ${{inputs.aws_environment}}] - ${{ github.event.head_commit.message }} :rocket:'
           MSG_MINIMAL: event,commit
+          SLACK_FOOTER:
