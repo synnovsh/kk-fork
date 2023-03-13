@@ -35,7 +35,6 @@ jobs:
               *.sh
               scripts/*
               .github/*
-              [^.]*
 
         - name: Log changes
           run: |
