@@ -63,7 +63,7 @@ jobs:
     needs: check_for_changes
     if: |
       github.event_name == 'push' && 
-      $ {{ fromJson(needs.check_for_changes.outputs.frontend) || fromJson(needs.check_for_changes.outputs.backend) }}
+      ${{ fromJson(needs.check_for_changes.outputs.frontend) || fromJson(needs.check_for_changes.outputs.backend) }}
     name: Deploy dev on push to main
     uses: ./.github/workflows/callable-deploy.yml
     with:
