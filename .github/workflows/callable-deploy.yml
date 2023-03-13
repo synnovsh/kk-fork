@@ -20,10 +20,8 @@ jobs:
         with:
           node-version: "16"
 
-      - name: Configure AWS credentials
-        run: echo "foo"
-
       - name: Deploy frontend to ${{ inputs.aws_environment }}
+        run: echo "foo"
 
   slackNotification:
     if: ${{ always() }}
