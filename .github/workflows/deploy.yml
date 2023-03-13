@@ -20,6 +20,8 @@ jobs:
     uses: ./.github/workflows/callable-deploy.yml
     with:
       aws_environment: dev
+    secrets:
+      SLACK_DEPLOY_WEBHOOK_URL: ${{ SLACK_DEPLOY_WEBHOOK_URL }}
 
   deploy_on_workflow_dispatch:
     if: github.event_name == 'workflow_dispatch'
@@ -27,3 +29,5 @@ jobs:
     uses: ./.github/workflows/callable-deploy.yml
     with:
       aws_environment: ${{ inputs.aws_environment }}
+    secrets:
+      SLACK_DEPLOY_WEBHOOK_URL: ${{ SLACK_DEPLOY_WEBHOOK_URL }}
