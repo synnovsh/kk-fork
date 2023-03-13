@@ -21,7 +21,7 @@ jobs:
     with:
       aws_environment: dev
     secrets:
-      SLACK_DEPLOY_WEBHOOK_URL: ${{ SLACK_DEPLOY_WEBHOOK_URL }}
+      SLACK_DEPLOY_WEBHOOK_URL: ${{ secrets.SLACK_DEPLOY_WEBHOOK_URL }}
 
   deploy_on_workflow_dispatch:
     if: github.event_name == 'workflow_dispatch'
@@ -30,4 +30,4 @@ jobs:
     with:
       aws_environment: ${{ inputs.aws_environment }}
     secrets:
-      SLACK_DEPLOY_WEBHOOK_URL: ${{ SLACK_DEPLOY_WEBHOOK_URL }}
+      SLACK_DEPLOY_WEBHOOK_URL: ${{ secrets.SLACK_DEPLOY_WEBHOOK_URL }}
