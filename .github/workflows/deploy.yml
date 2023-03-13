@@ -19,27 +19,26 @@ on:
 
 jobs: 
   check_files:
-  name: Check if needs deployment
+    name: Check if needs deployment
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      
-      - name: Check changed files
-        id: check
-        uses: tj-actions/changed-files@v35
-        with:
-          files_ignore: |
-          *.md
-          *.sh
-          scripts/*
+        - uses: actions/checkout@v3
+          with:
+            fetch-depth: 0
 
-      - name: Log changes
-        run: |
-           echo "Any files changed: ${{ steps.frontend.outputs.all_modified_files }}"
-           echo "Files: ${{ steps.frontend.outputs.all_modified_files }}"
+        - name: Check changed files
+          id: check
+          uses: tj-actions/changed-files@v35
+          with:
+            files_ignore: |
+              *.md
+              *.sh
+              scripts/*
+
+        - name: Log changes
+          run: |
+             echo "Any files changed: ${{ steps.check.outputs.all_modified_files }}"
+             echo "Files: ${{ steps.check.outputs.all_modified_files }}"
 
   deploy_dev_on_push_main:
     if: false #github.event_name == 'push'
