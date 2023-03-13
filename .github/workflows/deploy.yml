@@ -56,7 +56,7 @@ jobs:
     # These outputs are strings  
     outputs:
       frontend: ${{ fromJson(steps.frontend.outputs.any_modified) || fromJson(steps.frontend-cdk.outputs.any_modified) }}
-      backend: ${{ steps.backend.outputs.any_modified }}
+      backend: ${{ fromJson(steps.backend.outputs.any_modified) }}
 
   deploy_dev_on_push_main:
     needs: check_for_changes
