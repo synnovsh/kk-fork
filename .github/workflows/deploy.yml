@@ -64,7 +64,7 @@ jobs:
     name: Deploy dev on push to main
     uses: ./.github/workflows/callable-deploy.yml
     with:
-      aws_environment: dev
+      aws_environment: gasynnove
       deploy_frontend: ${{ fromJSON(needs.check_for_changes.outputs.frontend) }}
       deploy_backend: ${{ fromJSON(needs.check_for_changes.outputs.backend) }}
     secrets:
