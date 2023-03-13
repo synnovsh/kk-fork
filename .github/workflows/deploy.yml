@@ -31,7 +31,7 @@ jobs:
           uses: tj-actions/changed-files@v35
           with:
             files_ignore: |
-              README.md
+              *README.md
               *.sh
               scripts/*
               .github/*
