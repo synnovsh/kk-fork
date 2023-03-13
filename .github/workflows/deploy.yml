@@ -58,11 +58,21 @@ jobs:
       frontend: ${{ fromJson(steps.frontend.outputs.any_modified) || fromJson(steps.frontend-cdk.outputs.any_modified) }}
       backend: ${{ fromJson(steps.backend.outputs.any_modified) }}
 
+  fake_job:
+    needs: check_for_changes
+    if: true #| github.event_name == 'push' && ${{ fromJson(needs.check_for_changes.outputs.frontend) || fromJson(needs.check_for_changes.outputs.backend) }}
+    name: Fake Job
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Foo
+      run: |
+        echo "Any changes: ${{ fromJson(needs.check_for_changes.outputs.frontend) || fromJson(needs.check_for_changes.outputs.backend) }}"
+        echo "Conditional: ${{ github.event_name == 'push' && fromJson(needs.check_for_changes.outputs.frontend) || fromJson(needs.check_for_changes.outputs.backend) }}"
+
   deploy_dev_on_push_main:
     needs: check_for_changes
-    if: |
-      github.event_name == 'push' && 
-      ${{ fromJson(needs.check_for_changes.outputs.frontend) || fromJson(needs.check_for_changes.outputs.backend) }}
+    if: false #| github.event_name == 'push' && ${{ fromJson(needs.check_for_changes.outputs.frontend) || fromJson(needs.check_for_changes.outputs.backend) }}
     name: Deploy dev on push to main
     uses: ./.github/workflows/callable-deploy.yml
     with:
