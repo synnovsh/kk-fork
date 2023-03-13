@@ -31,11 +31,13 @@ jobs:
           uses: tj-actions/changed-files@v35
           with:
             files_ignore: |
-              *.md
+              README.md
               *.sh
               scripts/*
+              .github/*
+              [^.]*
 
         - name: Log changes
           run: |
-             echo "Any files changed: ${{ steps.check.outputs.all_modified_files }}"
+             echo "Any files changed: ${{ steps.check.outputs.any_modified_files }}"
              echo "Files: ${{ steps.check.outputs.all_modified_files }}"
