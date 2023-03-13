@@ -27,21 +27,17 @@ jobs:
         id: frontend
         uses: tj-actions/changed-files@v35
         with:
-          json: "true" # otherwise string
           files: frontend/* 
       
       - name: Check if changes to frontend-cdk
         id: frontend-cdk
         uses: tj-actions/changed-files@v35
         with:
-          json: "true" # otherwise string
           files: frontend-cdk/* 
       
       - name: Log changes
         run: |
-           echo "check or: ${{ steps.frontend.outputs.any_modified || steps.frontend-cdk.outputs.any_modified }}"
-           echo "check or again: ${{ fromJson(steps.frontend.outputs.any_modified) || fromJson(steps.frontend-cdk.outputs.any_modified) }}"
-           echo "Frontend has changes: ${{ steps.frontend.outputs.any_modified || steps.frontend-cdk.outputs.any_modified }}"
+           echo "Frontend has changes: ${{ fromJson(steps.frontend.outputs.any_modified) || fromJson(steps.frontend-cdk.outputs.any_modified) }}"
            echo "frontend/: ${{ steps.frontend.outputs.all_modified_files }}"
            echo "frontend-cdk/: ${{ steps.frontend-cdk.outputs.all_modified_files }}"
 
@@ -60,13 +56,14 @@ jobs:
     
     # These outputs are strings  
     outputs:
-      frontend: ${{ steps.frontend.outputs.any_modified || steps.frontend-cdk.outputs.any_modified }}
+      frontend: ${{ fromJson(steps.frontend.outputs.any_modified) || fromJson(steps.frontend-cdk.outputs.any_modified) }}
       backend: steps.backend.outputs.any_modified 
-      has_changes:  ${{ !(!steps.frontend.outputs.any_modified && !steps.backend.outputs.any_modified) }}
 
   deploy_dev_on_push_main:
     needs: check_for_changes
-    if: false #github.event_name == 'push' && needs.check_for_changes.outputs.has_changes == 'true'
+    if: |
+      github.event_name == 'push' && 
+      (fromJson(needs.check_for_changes.outputs.frontend) || fromJson(needs.check_for_changes.outputs.backend))
     name: Deploy dev on push to main
     uses: ./.github/workflows/callable-deploy.yml
     with:
