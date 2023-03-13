@@ -18,28 +18,18 @@ on:
         default: false
 
 jobs: 
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Log changes
-        run: |
-             echo "wooo"   
-    outputs:
-      result: failure
+  deploy_dev_on_push_main:
+    if: github.event_name == 'push'
+    name: Deploy dev on push to main
+    uses: ./.github/workflows/callable-deploy.yml
+    with:
+      aws_environment: dev
+      deploy_backend_only: false
 
-  slackNotification:
-    if: ${{ always() }}
-    needs: deploy
-    name: Slack Notification
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Slack Notification
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_CHANNEL: kompetansekartlegging-deployments
-          SLACK_COLOR: failure #${{ needs.deploy.result }} # or a specific color like 'good' or '#ff00ff'
-          SLACK_ICON: https://github.com/rtCamp.png?size=48
-          SLACK_USERNAME: Kompetansekartlegging deploy bot
-          SLACK_WEBHOOK: ${{ secrets.SLACK_DEPLOY_WEBHOOK_URL }}
-      
+  deploy_on_workflow_dispatch:
+    if: github.event_name == 'workflow_dispatch'
+    name: Deploy on dispatch
+    uses: ./.github/workflows/callable-deploy.yml
+    with:
+      aws_environment: ${{ inputs.aws_environment }}
+      deploy_backend_only: ${{ inputs.deploy_backend_only }}

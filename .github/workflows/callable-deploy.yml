@@ -9,17 +9,6 @@ on:
       aws_region:
         type: string
         default: 'eu-central-1'
-      deploy_frontend:
-        type: boolean
-        default: false
-      deploy_backend:
-        type: boolean
-        default: false
-    secrets:
-      aws_access_key_id:
-        required: true
-      aws_secret_access_key:
-        required: true
 
 jobs:
   deploy:
@@ -32,36 +21,24 @@ jobs:
           node-version: "16"
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.aws_access_key_id }}
-          aws-secret-access-key: ${{ secrets.aws_secret_access_key }}
-          aws-region: ${{ inputs.aws_region }}
-
-      - name: Install packages
-        run: ./install.sh
-
-      - name: Update CDK Toolkit
-        run: cd cdk && npx cdk bootstrap
-
-      - name: Deploy backend to ${{ inputs.aws_environment }}
-        if: ${{ inputs.deploy_backend }}
-        run: |
-          cd cdk && npx cdk deploy \
-          --require-approval never \
-          --outputs-file outputs.json \
-          --context ENV=gasynnove \ 
-
-      - name: Prepare frontend ${{ inputs.aws_environment }} deployment
-        if:  ${{ inputs.deploy_frontend }}
-        env:
-          REACT_APP_USER_BRANCH: gasynnove #${{ inputs.aws_environment == 'prod' && 'master' || 'dev' }}
-        run: |
-          cd cdk && npx ts-node --prefer-ts-exts hooks/hooks.ts && \
-          npm run codegen && \
-          cd ../frontend && echo $REACT_APP_USER_BRANCH >> .env && \
-          CI='' npm run build \
+        run: echo "foo"
 
       - name: Deploy frontend to ${{ inputs.aws_environment }}
         if: inputs.deploy_backend_only == false
         run: cd frontend-cdk && npx cdk deploy --require-approval never
+
+  slackNotification:
+    if: ${{ always() }}
+    needs: deploy
+    name: Slack Notification
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_CHANNEL: kompetansekartlegging-deployments
+          SLACK_COLOR: ${{ needs.deploy.result }}
+          SLACK_ICON: https://github.com/rtCamp.png?size=48
+          SLACK_USERNAME: Kompetansekartlegging deploy bot
+          SLACK_WEBHOOK: ${{ secrets.SLACK_DEPLOY_WEBHOOK_URL }}
