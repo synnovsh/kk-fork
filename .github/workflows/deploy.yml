@@ -44,17 +44,20 @@ jobs:
   deploy_dev_on_push_main:
     needs: check_files
     if: github.event_name == 'push' && needs.check_files.outputs.any_modified == 'true'
-    uses: ./.github/workflows/callable-deploy.yml
-    with:
-      aws_environment: dev
-    #secrets:
-      #SLACK_DEPLOY_WEBHOOK_URL: ${{ secrets.SLACK_DEPLOY_WEBHOOK_URL }}
-
+    runs-on: ubuntu-latest
+    steps:
+      - id: push_main
+        run: |
+              echo "push_main"
+      
   deploy_on_workflow_dispatch:
     if: github.event_name == 'workflow_dispatch'
-    name: Deploy on dispatch
-    uses: ./.github/workflows/callable-deploy.yml
-    with:
-      aws_environment: ${{ inputs.aws_environment }}
-    #secrets:
-      #SLACK_DEPLOY_WEBHOOK_URL: ${{ secrets.SLACK_DEPLOY_WEBHOOK_URL }}
+    runs-on: ubuntu-latest
+    steps:
+      - id: workflow_dispatch
+        run: |
+              echo "workflow_dispatc"
+
+      
+
+    
