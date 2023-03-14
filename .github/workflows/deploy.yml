@@ -13,7 +13,33 @@ on:
           - dev
           - prod
 
+
+
 jobs: 
+  check_files:
+      name: Check if needs deployment
+      runs-on: ubuntu-latest
+      steps:
+          - uses: actions/checkout@v3
+            with:
+              fetch-depth: 2
+
+          - name: Check changed files
+            id: check
+            uses: tj-actions/changed-files@v35
+            with:
+              files_ignore: |
+                */README.md
+                *.sh
+                scripts/*
+                .github/*
+          - name: Log changes
+            run: |
+              echo "Any files changed: ${{ steps.check.outputs.any_modified }}"
+              echo "Files: ${{ steps.check.outputs.all_modified_files }}"
+      outputs:
+        any_modified: ${{ steps.check.outputs.any_modified }}
+
   deploy_dev_on_push_main:
     if: github.event_name == 'push'
     name: Deploy dev on push to main
