@@ -20,7 +20,7 @@ jobs:
       steps:
           - uses: actions/checkout@v3
             with:
-              fetch-depth: 0
+              fetch-depth: 2
 
           - name: Check changed files
             id: check
@@ -34,6 +34,7 @@ jobs:
                 .github/workflows/frontend-eslint-prettier.yml
                 .gitignore
                 .github/ISSUE_TEMPLATE/*
+              since_last_remote_commit: true
           - name: Log changes
             run: |
               echo "Any files changed: ${{ steps.check.outputs.any_modified }}"
