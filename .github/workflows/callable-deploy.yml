@@ -12,15 +12,10 @@ on:
       deploy_backend_only:
         type: boolean
         default: false
-      excel:
-        type: boolean
-        default: true
     secrets:
       aws_access_key_id:
         required: true
       aws_secret_access_key:
-        required: true
-      azure:
         required: true
       SLACK_DEPLOY_WEBHOOK_URL:
         required: true
@@ -54,8 +49,6 @@ jobs:
           --require-approval never \
           --outputs-file outputs.json \
           --context ENV=${{ inputs.aws_environment }} \
-          --context AZURE=${{ secrets.azure }} \
-          --context EXCEL=${{ inputs.excel }}
 
       - name: Prepare frontend ${{ inputs.aws_environment }} deployment
         if: inputs.deploy_backend_only == false
@@ -65,6 +58,7 @@ jobs:
           cd cdk && npx ts-node --prefer-ts-exts hooks/hooks.ts && \
           npm run codegen && \
           cd ../frontend && echo $VITE_USER_BRANCH >> .env && \
+          echo $VITE_USER_BRANCH && \
           CI='' npm run build \
 
       - name: Deploy frontend to ${{ inputs.aws_environment }}
