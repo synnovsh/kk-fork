@@ -84,6 +84,7 @@ export const English: LanguageSchema = {
         downloadCatalogs: 'Download catalogs',
         editOrganizations: 'Edit organizations',
         editSuperAdministrators: 'Edit super-administrators',
+        editOrganizationAdministrators: 'Edit organization-administrators',
       },
     },
     navbar: {
@@ -254,12 +255,10 @@ export const English: LanguageSchema = {
         identifierAttributeCantBeEmpty: "Identifier attribute can't be empty."
       },
       editSuperAdministrators: {
-        description: 'On this page you can add and remove super-administrators.',
-        superAdministrator: 'Super-administrator',
-        addSuperAdministrator: 'Add super-administrator',
+        description: 'On this page you can add and remove super-administrators.'
       },
       editOrganizationAdministrators: {
-        description: 'On this page you can add and remove administrators for specific organizations.',
+        description: 'On this page you can add and remove organization-administrators.'
       }
     },
     adminApi: {

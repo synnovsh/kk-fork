@@ -4,7 +4,14 @@ import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Container from '@material-ui/core/Container'
+import IconButton from '@material-ui/core/IconButton'
+import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import TableContainer from '@material-ui/core/TableContainer'
+import TableHead from '@material-ui/core/TableHead'
+import TableRow from '@material-ui/core/TableRow'
 import Typography from '@material-ui/core/Typography'
+import DeleteIcon from '@material-ui/icons/Delete'
 import PersonAddIcon from '@material-ui/icons/PersonAdd'
 
 import { useAppSelector } from '../../redux/hooks'
@@ -18,9 +25,60 @@ import {
 } from '../AdminPanel/adminApi'
 import commonStyles from '../AdminPanel/common.module.css'
 import DeleteUserFromGroupDialog from '../AdminPanel/DeleteUserFromGroupDialog'
+import { getAttribute } from '../AdminPanel/helpers'
+import PictureAndNameCell from '../AdminPanel/PictureAndNameCell'
 import useApiGet from '../AdminPanel/useApiGet'
 import Button from '../mui/Button'
-import AdminTable from '../AdminPanel/AdminTable'
+import Table from '../mui/Table'
+
+const Admin = (props: any) => {
+  const { admin, deleteAdmin } = props
+  const username = admin.Username
+  const name = getAttribute(admin, 'name')
+  const email = getAttribute(admin, 'email')
+  const picture = getAttribute(admin, 'picture')
+
+  return (
+    <>
+      <TableRow>
+        <TableCell>
+          <PictureAndNameCell name={name} picture={picture} />
+        </TableCell>
+        <TableCell>{email}</TableCell>
+        <TableCell>{username}</TableCell>
+        <TableCell>
+          <IconButton edge="end" onClick={() => deleteAdmin(admin)}>
+            <DeleteIcon />
+          </IconButton>
+        </TableCell>
+      </TableRow>
+    </>
+  )
+}
+
+const AdminTable = ({ admins, deleteAdmin }: any) => {
+  const { t } = useTranslation()
+
+  return (
+    <TableContainer className={commonStyles.tableContainer}>
+      <Table stickyHeader>
+        <TableHead>
+          <TableRow>
+            <TableCell>{t('employee')}</TableCell>
+            <TableCell>{t('email')}</TableCell>
+            <TableCell>{t('username')}</TableCell>
+            <TableCell />
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {admins.map((gl: any) => (
+            <Admin key={gl.Username} admin={gl} deleteAdmin={deleteAdmin} />
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  )
+}
 
 const EditSuperAdmins = () => {
   const { t } = useTranslation()
@@ -79,7 +137,7 @@ const EditSuperAdmins = () => {
             style={{ marginTop: '24px' }}
             onClick={() => setShowAddAdmin(true)}
           >
-            {t('superAdmin.editSuperAdministrators.addSuperAdministrator')}
+            {t('addAdministrator')}
           </Button>
         </>
       )}
@@ -89,9 +147,7 @@ const EditSuperAdmins = () => {
         onExited={clearSelectedAdmin}
         onConfirm={deleteAdminConfirm}
         user={adminToDelete}
-        roleName={t(
-          'superAdmin.editSuperAdministrators.superAdministrator'
-        ).toLowerCase()}
+        roleName={t('administrator').toLowerCase()}
       />
       {showAddAdmin && (
         <AddUserToGroupDialog
@@ -100,9 +156,7 @@ const EditSuperAdmins = () => {
           userGetFn={listAllUsersInOrganization}
           onCancel={hideShowAddAdmin}
           onConfirm={addAdminConfirm}
-          roleName={t(
-            'superAdmin.editSuperAdministrators.superAdministrator'
-          ).toLowerCase()}
+          roleName={t('administrator').toLowerCase()}
         />
       )}
     </Container>

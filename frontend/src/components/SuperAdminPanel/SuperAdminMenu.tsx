@@ -37,7 +37,7 @@ const SuperAdminMenu = ({
     },
     {
       key: SubmenuCategory.EDIT_ORGANIZATION_ADMINS,
-      text: t('menu.submenu.editAdministrators'),
+      text: t('menu.submenu.editOrganizationAdministrators'),
     },
     // refactor this one out once the whole app uses routing
     {
