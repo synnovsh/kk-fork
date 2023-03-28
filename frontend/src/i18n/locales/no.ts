@@ -84,6 +84,7 @@ export const Norwegian: LanguageSchema = {
         downloadCatalogs: 'Last ned kataloger',
         editOrganizations: 'Rediger organisasjoner',
         editSuperAdministrators: 'Rediger super-administratorer',
+        editOrganizationAdministrators: 'Rediger organisasjon-administratorer',
       },
     },
     navbar: {
@@ -254,12 +255,10 @@ export const Norwegian: LanguageSchema = {
         identifierAttributeCantBeEmpty: 'Identifier attribute kan ikke være tom.'
       },
       editSuperAdministrators: {
-        description: 'På denne siden kan du legge til og fjerne super-administratorer.',
-        superAdministrator: 'Super-administrator',
-        addSuperAdministrator: 'Legg til super-administrator',
+        description: 'På denne siden kan du legge til og fjerne super-administratorer.'
       },
       editOrganizationAdministrators: {
-        description: 'På denne siden kan du legge til og fjerne administratorer for spesifikke organisasjoner.',
+        description: 'På denne siden kan du legge til og fjerne organisasjon-administratorer.'
       }
     },
     adminApi: {
