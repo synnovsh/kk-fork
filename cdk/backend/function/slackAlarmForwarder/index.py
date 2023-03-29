@@ -17,7 +17,7 @@ def handler(event, context):
             attachments.append(create_payload(json.loads(msg)))
 
     requests.post(
-        url=get_slack_webhook_url(),
+        url=get_slack_webhook_url2(),
         json=dict(attachments=attachments)
     )
     
@@ -34,11 +34,11 @@ def create_payload(msg):
         'color': colors.get(msg['NewStateValue'], '#bfbfbf'),
     }
 
-def get_slack_webhook_url():
+def get_slack_webhook_url2():
     get_secret_value_response = client.get_secret_value(
-        SecretId="slack_webhook_url"
+        SecretId="slack_webhook_url2"
         )
     response = get_secret_value_response['SecretString']
-    slack_webhook_url = json.loads(response)['url']
+    slack_webhook_url2 = json.loads(response)['url']
     
-    return slack_webhook_url
+    return slack_webhook_url2

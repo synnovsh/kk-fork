@@ -688,7 +688,7 @@ export class KompetanseStack extends Stack {
     const slackAlarmForwarderPermissions = new iam.PolicyStatement({
       actions: ['secretsmanager:GetSecretValue'],
       resources: [
-        'arn:aws:secretsmanager:eu-central-1:*:secret:slack_webhook_url-*',
+        'arn:aws:secretsmanager:eu-central-1:*:secret:slack_webhook_url2-*',
       ],
     })
 
@@ -703,8 +703,8 @@ export class KompetanseStack extends Stack {
       }
     )
 
-    new aws_secretsmanager.Secret(this, 'slack_webhook_url', {
-      secretName: 'slack_webhook_url',
+    new aws_secretsmanager.Secret(this, 'slack_webhook_url2', {
+      secretName: 'slack_webhook_url2',
       generateSecretString: {
         secretStringTemplate:
           '{"url": "value must be set using AWS Console or CLI"}',
