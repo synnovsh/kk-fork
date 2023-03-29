@@ -10,8 +10,8 @@ on:
         description: AWS environment
         type: choice
         options:
-          - dev
-          - prod
+          - synnove-env-dev
+          - synnove-env-prod
       deploy_backend_only:
         description: Deploy backend only
         type: boolean
