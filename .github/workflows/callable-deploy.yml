@@ -52,6 +52,8 @@ jobs:
         if: inputs.deploy_backend_only == false
         env:
           VITE_USER_BRANCH: "synnove-fork-env-2"
+          NODE_OPTIONS: "--max-old-space-size=2048"
+
         run: |
           cd cdk && npx ts-node --prefer-ts-exts hooks/hooks.ts && \
           npm run codegen && \
